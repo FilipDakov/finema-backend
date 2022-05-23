@@ -27,6 +27,10 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void addMovie(MovieDTO movie) throws Exception {
+        Optional<Movie> optional = movieRepository.findFirstByName(movie.getName());
+        if(optional.isPresent()){
+            throw new IllegalArgumentException("Movie is already present in database");
+        }
         try {
             Movie mapMovie = movieMapper.mapMovie(movie);
             movieRepository.saveAndFlush(mapMovie);

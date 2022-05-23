@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class MovieControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Response handleException(Exception e){
-        return new Response(ResponseEnum.ERROR,e.getMessage(),(short)500);
+        return new Response(ResponseEnum.ERROR,e.getMessage(),(short)501);
     }
 }
