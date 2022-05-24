@@ -67,7 +67,7 @@ public class ScreeningServiceImpl implements ScreeningService {
         LocalDate monday = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate sunday = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
 
-        Optional<List<Screening>> allByDateAfterAndDateBefore = screeningRepository.getAllByDateAfterAndDateBefore(convertToDateViaInstant(monday), convertToDateViaInstant(sunday));
+        Optional<List<Screening>> allByDateAfterAndDateBefore = screeningRepository.getAllByDateAfterAndDateBefore(monday, sunday);
 
         List<ScreeningDTO> screeningDTOS = screeningMapper.mapToDtoScreenings(allByDateAfterAndDateBefore.get());
 

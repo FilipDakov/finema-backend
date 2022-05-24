@@ -41,24 +41,21 @@ public class MovieController {
     @CrossOrigin
     @RequestMapping(value = "/movies/getMovies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MovieDTO> getActiveMovies() throws Exception {
-        try {
-            return movieService.getListActiveMovies();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return movieService.getListActiveMovies();
     }
 
     @GET
     @Path("/movies/getCurrentMovies")
     @RequestMapping(value = "/movies/getCurrentMovies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MovieDTO> getCurrentMovies() throws Exception {
-        try {
-            return movieService.getCurrentMovies();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return movieService.getCurrentMovies();
+    }
+
+    @GET
+    @Path("/movies/getUpcoming")
+    @RequestMapping(value = "/movies/getUpcoming", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MovieDTO> getUpcomingMovies() throws Exception {
+        return movieService.getListMoviesComingSoon();
     }
 
 

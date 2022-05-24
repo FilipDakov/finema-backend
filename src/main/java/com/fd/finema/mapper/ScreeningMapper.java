@@ -48,8 +48,9 @@ public abstract class ScreeningMapper {
 
     @AfterMapping
     protected void afterMappingFromDto(ScreeningDTO dto, @MappingTarget Screening screening){
-        String eeee = new SimpleDateFormat("EEEE").format(screening.getDate());
-        Day day = Day.valueOf(new SimpleDateFormat("EEEE").format(screening.getDate()).toUpperCase(Locale.ROOT));
+    //    String eeee = new SimpleDateFormat("EEEE").format(screening.getDate());
+     //   Day day = Day.valueOf(new SimpleDateFormat("EEEE").format(screening.getDate()).toUpperCase(Locale.ROOT));
+        Day day = Day.valueOf(dto.getDate().getDayOfWeek().name());
         screening.setDayOfWeek(day);
     }
 

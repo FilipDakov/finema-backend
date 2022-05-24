@@ -2,6 +2,7 @@ package com.fd.finema.interfaces;
 
 import com.fd.finema.bom.AgeRestriction;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class MovieDTO {
     private AgeRestriction ageRestriction;
     private Integer timespan;
     private String description;
-    private Date releaseDate;
+    private LocalDate releaseDate;
     private String imgPath;
     private List<String> genres;
     private List<ActorDTO> actors;
@@ -47,11 +48,11 @@ public class MovieDTO {
         this.description = description;
     }
 
-    public Date getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 

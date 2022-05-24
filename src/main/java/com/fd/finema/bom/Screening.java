@@ -2,6 +2,7 @@ package com.fd.finema.bom;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ public class Screening extends BaseEntity {
     private Day dayOfWeek;
 
     @Column(nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(nullable = false)
     private String startTime;
@@ -49,11 +50,11 @@ public class Screening extends BaseEntity {
         this.premiereType = premiereType;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

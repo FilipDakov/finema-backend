@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,9 +44,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<MovieDTO> getListActiveMovies(){
-        Calendar calendar =Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH,-14);
-        Optional<List<Movie>> allByReleaseDateAfter = movieRepository.getAllByReleaseDateAfter(calendar.getTime());
+        Optional<List<Movie>> allByReleaseDateAfter = movieRepository.getAllByReleaseDateAfter(LocalDate.now().minusDays(14));
         return movieMapper.mapMovies(allByReleaseDateAfter.get());
     }
 
@@ -58,5 +56,12 @@ public class MovieServiceImpl implements MovieService {
             throw new IllegalArgumentException("No active movies found");
         }
         return movieMapper.mapMovies(activeMovies.get());
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<MovieDTO> getListMoviesComingSoon(){
+        Optional<List<Movie>> upcomingMovies = movieRepository.getFirst10ByReleaseDateAfterAndIsActiveOrderByReleaseDate(LocalDate.now(),false);
+        return movieMapper.mapMovies(upcomingMovies.get());
     }
 }

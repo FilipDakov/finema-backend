@@ -1,6 +1,7 @@
 package com.fd.finema.bom;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,8 +23,8 @@ public class Movie extends BaseEntity {
     @Column(nullable = false,length = 3000)
     private String description;
 
-    @Temporal(TemporalType.DATE)
-    private Date releaseDate;
+    @Column(nullable = false)
+    private LocalDate releaseDate;
 
     @Column(nullable = false)
     private String imgPath;
@@ -94,11 +95,11 @@ public class Movie extends BaseEntity {
         this.description = description;
     }
 
-    public Date getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 

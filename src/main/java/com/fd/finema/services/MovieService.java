@@ -15,4 +15,7 @@ public interface MovieService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     List<MovieDTO> getCurrentMovies();
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    List<MovieDTO> getListMoviesComingSoon();
 }

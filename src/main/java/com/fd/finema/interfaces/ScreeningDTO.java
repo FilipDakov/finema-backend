@@ -4,10 +4,11 @@ import com.fd.finema.bom.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ScreeningDTO{
-    private Date date;
+    private LocalDate date;
     private String startTime;
     private Integer hall;
     private BigDecimal ticketCost;
@@ -32,11 +33,11 @@ public class ScreeningDTO{
         this.premiereType = premiereType;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
