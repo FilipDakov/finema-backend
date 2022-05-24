@@ -27,9 +27,9 @@ public class MovieController {
     }
 
     @POST
-    @Path("movies/addMovie")
+    @Path("/movies/addMovie")
     @CrossOrigin
-    @RequestMapping(value = "movies/addMovie", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/movies/addMovie", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response addNewMovie(@RequestBody MovieDTO movie) throws Exception {
         movieService.addMovie(movie);
         return ResponseUtil.createSuccessResponse("Movie added successfully");
@@ -37,11 +37,24 @@ public class MovieController {
 
 
     @GET
-    @Path("movies/getValidMovies")
-    @RequestMapping(value = "movies/getValidMovies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MovieDTO> addNewMovie() throws Exception {
+    @Path("/movies/getMovies")
+    @CrossOrigin
+    @RequestMapping(value = "/movies/getMovies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MovieDTO> getActiveMovies() throws Exception {
         try {
             return movieService.getListActiveMovies();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @GET
+    @Path("/movies/getCurrentMovies")
+    @RequestMapping(value = "/movies/getCurrentMovies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MovieDTO> getCurrentMovies() throws Exception {
+        try {
+            return movieService.getCurrentMovies();
         } catch (Exception e) {
             e.printStackTrace();
         }

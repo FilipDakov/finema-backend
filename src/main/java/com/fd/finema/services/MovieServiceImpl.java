@@ -49,4 +49,14 @@ public class MovieServiceImpl implements MovieService {
         Optional<List<Movie>> allByReleaseDateAfter = movieRepository.getAllByReleaseDateAfter(calendar.getTime());
         return movieMapper.mapMovies(allByReleaseDateAfter.get());
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<MovieDTO> getCurrentMovies(){
+        Optional<List<Movie>> activeMovies = movieRepository.getAllByIsActive(true);
+        if(!activeMovies.isPresent()){
+            throw new IllegalArgumentException("No active movies found");
+        }
+        return movieMapper.mapMovies(activeMovies.get());
+    }
 }

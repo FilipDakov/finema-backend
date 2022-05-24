@@ -30,6 +30,9 @@ public class Screening extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ScreeningTypeEnum screeningType;
 
+    @Enumerated(value = EnumType.STRING)
+    private ScreeningPremiereType premiereType;
+
     @ManyToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private Movie movie;
@@ -37,6 +40,14 @@ public class Screening extends BaseEntity {
 //    @OneToMany(mappedBy = "screening")
 //    private List<Reservation> reservations;
 
+
+    public ScreeningPremiereType getPremiereType() {
+        return premiereType;
+    }
+
+    public void setPremiereType(ScreeningPremiereType premiereType) {
+        this.premiereType = premiereType;
+    }
 
     public Date getDate() {
         return date;

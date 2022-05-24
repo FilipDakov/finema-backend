@@ -12,7 +12,25 @@ public class ScreeningDTO{
     private Integer hall;
     private BigDecimal ticketCost;
     private ScreeningTypeEnum screeningType;
+    private ScreeningPremiereType premiereType;
     private String movie;
+    private String imgPath;
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+    public ScreeningPremiereType getPremiereType() {
+        return premiereType;
+    }
+
+    public void setPremiereType(ScreeningPremiereType premiereType) {
+        this.premiereType = premiereType;
+    }
 
     public Date getDate() {
         return date;

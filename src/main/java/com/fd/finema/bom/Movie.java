@@ -28,6 +28,9 @@ public class Movie extends BaseEntity {
     @Column(nullable = false)
     private String imgPath;
 
+    @Column(name = "active")
+    private Boolean isActive;
+
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
@@ -40,6 +43,15 @@ public class Movie extends BaseEntity {
     private List<Actor> actors;
 
     public Movie() {
+    }
+
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
     public List<Actor> getActors() {

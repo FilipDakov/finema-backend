@@ -1,14 +1,21 @@
 package com.fd.finema.mapper;
 
+import com.fd.finema.bom.Day;
 import com.fd.finema.bom.Hall;
 import com.fd.finema.bom.Movie;
 import com.fd.finema.bom.Screening;
 import com.fd.finema.interfaces.ScreeningDTO;
 import com.fd.finema.repository.HallRepository;
 import com.fd.finema.repository.MovieRepository;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Mapper(componentModel = "spring")
@@ -18,7 +25,6 @@ public abstract class ScreeningMapper {
     private HallRepository hallRepository;
     @Autowired
     private MovieRepository movieRepository;
-
 
     public abstract Screening mapScreeningFromDto(ScreeningDTO dto);
 
@@ -37,5 +43,39 @@ public abstract class ScreeningMapper {
         }
         return movie.get();
 
+    }
+
+
+    @AfterMapping
+    protected void afterMappingFromDto(ScreeningDTO dto, @MappingTarget Screening screening){
+        String eeee = new SimpleDateFormat("EEEE").format(screening.getDate());
+        Day day = Day.valueOf(new SimpleDateFormat("EEEE").format(screening.getDate()).toUpperCase(Locale.ROOT));
+        screening.setDayOfWeek(day);
+    }
+
+    public abstract List<ScreeningDTO> mapToDtoScreenings(List<Screening> screenings);
+
+    public abstract ScreeningDTO mapDtoFromLdmScreening(Screening screening);
+
+    protected Integer mapHall(Hall hall) {
+        if (hall != null) {
+            return hall.getNumber();
+        }
+
+        return null;
+    }
+
+    protected String mapMovie(Movie movie) {
+        if (movie != null) {
+            return movie.getName();
+        }
+        return null;
+    }
+
+    @AfterMapping
+    protected void afterMappingToDto(@MappingTarget ScreeningDTO dto, Screening screening){
+        if(screening.getMovie()!= null){
+            dto.setImgPath(screening.getMovie().getImgPath());
+        }
     }
 }
