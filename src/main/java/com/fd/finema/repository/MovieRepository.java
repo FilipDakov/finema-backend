@@ -13,5 +13,6 @@ public interface MovieRepository extends JpaRepository<Movie,Long> {
     Optional<List<Movie>> getAllByIsActive(Boolean active);
     Optional<Movie> findFirstByName(String name);
     Optional<List<Movie>> getFirst10ByReleaseDateAfterAndIsActiveOrderByReleaseDate(LocalDate date, Boolean active);
-
+    Optional<List<Movie>> getAllByReleaseDateIsBetweenAndIsActive(LocalDate firstDate,LocalDate lastDate,Boolean active);
+    Optional<List<Movie>> getAllByReleaseDateBeforeAndIsActive(LocalDate date, Boolean active);
 }

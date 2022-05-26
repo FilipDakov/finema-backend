@@ -1,5 +1,7 @@
 package com.fd.finema.bom;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@DynamicUpdate
 @Table
 public class Movie extends BaseEntity {
 
@@ -35,6 +38,9 @@ public class Movie extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
+
+    @OneToOne()
+    private Screening screening;
 
 //    @OneToMany(fetch = FetchType.LAZY,mappedBy = "movie")
 //    private List<Screening> screenings;

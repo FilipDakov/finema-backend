@@ -43,8 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/logIn","/signUp","/movies/getMovies","/movies/addMovie",
-                        "/movies/getCurrentMovies","/screening/addScreening","/movies/getUpcoming")
+                .antMatchers("/logIn","/signUp","/movies/getMovies",
+                        "/movies/getCurrentMovies","/screening/currentScreenings/{day}","/today","/movies/getUpcoming")
                 .permitAll()
                 .antMatchers("/v2/api-docs",
                 "/configuration/ui",

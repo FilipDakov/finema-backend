@@ -1,9 +1,6 @@
 package com.fd.finema.mapper;
 
-import com.fd.finema.bom.Day;
-import com.fd.finema.bom.Hall;
-import com.fd.finema.bom.Movie;
-import com.fd.finema.bom.Screening;
+import com.fd.finema.bom.*;
 import com.fd.finema.interfaces.ScreeningDTO;
 import com.fd.finema.repository.HallRepository;
 import com.fd.finema.repository.MovieRepository;
@@ -77,6 +74,37 @@ public abstract class ScreeningMapper {
     protected void afterMappingToDto(@MappingTarget ScreeningDTO dto, Screening screening){
         if(screening.getMovie()!= null){
             dto.setImgPath(screening.getMovie().getImgPath());
+        }
+    }
+
+    protected String mapPremiereType(ScreeningPremiereType type){
+        if(type == null){
+            return null;
+        }else{
+            return type.getValue();
+        }
+    }
+
+    protected String mapScreeningType(ScreeningTypeEnum type){
+        if(type == null){
+            return null;
+        }else{
+            return type.getValue();
+        }
+    }
+
+
+    protected ScreeningTypeEnum mapStringToScreeningType(String input){
+        if(input == null){return null;}
+        else{
+            return ScreeningTypeEnum.valueOf(input.toUpperCase(Locale.ROOT));
+        }
+    }
+
+    protected ScreeningPremiereType mapStringToScreeningPremiereType(String input){
+        if(input == null){return null;}
+        else{
+            return ScreeningPremiereType.valueOf(input.toUpperCase(Locale.ROOT));
         }
     }
 }

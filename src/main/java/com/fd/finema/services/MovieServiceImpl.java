@@ -33,6 +33,7 @@ public class MovieServiceImpl implements MovieService {
         }
         try {
             Movie mapMovie = movieMapper.mapMovie(movie);
+            mapMovie.setActive(false);
             movieRepository.saveAndFlush(mapMovie);
         } catch (Exception e) {
             e.printStackTrace();
