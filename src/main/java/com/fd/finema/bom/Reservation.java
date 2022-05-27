@@ -1,12 +1,18 @@
 package com.fd.finema.bom;
 
+import com.fd.finema.security.User;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 public class Reservation extends BaseEntity {
 
     @Column(nullable = false)
     private String firstName;
+    @Column()
+    private String middleName;
     @Column(nullable = false)
     private String lastName;
 
@@ -20,6 +26,37 @@ public class Reservation extends BaseEntity {
 
     @Column(nullable = false)
     private Integer seatNumber;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @CreationTimestamp
+    Timestamp timestamp;
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getFirstName() {
         return firstName;
