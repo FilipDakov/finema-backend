@@ -14,4 +14,6 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
 
     Optional<List<Reservation>> findAllByScreeningAndStatusIsNot(Screening screening, Status status);
     Optional<Reservation> findFirstByScreeningAndSeatNumber(Screening screening,Integer seat);
+    Optional<List<Reservation>> findAllByFirstNameAndMiddleNameAndLastNameAndStatus(String fName,String mName,String lName,Status status);
+    Optional<List<Reservation>> findAllByUser_Email(String username);
 }

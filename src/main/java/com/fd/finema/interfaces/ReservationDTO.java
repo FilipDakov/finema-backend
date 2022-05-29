@@ -2,6 +2,7 @@ package com.fd.finema.interfaces;
 
 import com.fd.finema.bom.Seat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationDTO {
@@ -11,7 +12,18 @@ public class ReservationDTO {
     private String lastName;
     private List<Integer> seatNumbers;
     private String user;
+    private String status;
 
+
+    public ReservationDTO(ScreeningDTO screening, String firstName, String middleName, String lastName, List<Integer> seatNumbers, String user, String status) {
+        this.screening = screening;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.seatNumbers = seatNumbers;
+        this.user = user;
+        this.status = status;
+    }
 
     public ReservationDTO(ScreeningDTO screening, String firstName, String middleName, String lastName, List<Integer> seatNumbers, String user) {
         this.screening = screening;
@@ -22,7 +34,16 @@ public class ReservationDTO {
         this.user = user;
     }
 
+
     public ReservationDTO(){}
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public ScreeningDTO getScreening() {
         return screening;
@@ -57,6 +78,9 @@ public class ReservationDTO {
     }
 
     public List<Integer> getSeatNumbers() {
+        if(seatNumbers == null){
+            seatNumbers = new ArrayList<>();
+        }
         return seatNumbers;
     }
 

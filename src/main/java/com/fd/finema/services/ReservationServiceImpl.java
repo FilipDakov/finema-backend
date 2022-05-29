@@ -2,8 +2,10 @@ package com.fd.finema.services;
 
 import com.fd.finema.bom.*;
 import com.fd.finema.interfaces.LockDTO;
+import com.fd.finema.interfaces.PersonDTO;
 import com.fd.finema.interfaces.ReservationDTO;
 import com.fd.finema.interfaces.ScreeningDTO;
+import com.fd.finema.mapper.ReservationMapper;
 import com.fd.finema.repository.LockRepository;
 import com.fd.finema.repository.ReservationRepository;
 import com.fd.finema.repository.ScreeningRepository;
@@ -15,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -28,14 +27,17 @@ public class ReservationServiceImpl implements ReservationService {
     ReservationRepository reservationRepository;
     LockRepository lockRepository;
     UserRepository userRepository;
+    ReservationMapper reservationMapper;
 
     public ReservationServiceImpl(ScreeningRepository screeningRepository, LockService lockService
-            , ReservationRepository reservationRepository, LockRepository lockRepository, UserRepository userRepository) {
+            , ReservationRepository reservationRepository, LockRepository lockRepository,
+                                  UserRepository userRepository, ReservationMapper reservationMapper) {
         this.screeningRepository = screeningRepository;
         this.lockService = lockService;
         this.reservationRepository = reservationRepository;
         this.lockRepository = lockRepository;
-        this.userRepository =userRepository;
+        this.userRepository = userRepository;
+        this.reservationMapper = reservationMapper;
     }
 
     @Override
@@ -76,19 +78,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new IllegalArgumentException("No such user found");
         }
 
-        ScreeningDTO screeningDto = reservationDto.getScreening();
-        if (Objects.isNull(screeningDto)) {
-            throw new IllegalArgumentException("Screening should not be null");
-        }
-        Optional<Screening> screeningOptional = screeningRepository.findFirstByDateAndStartTimeAndHall_NumberAndMovie_Name(screeningDto.getDate(), screeningDto.getStartTime(),
-                screeningDto.getHall(), screeningDto.getMovie());
-
-        if (!screeningOptional.isPresent()) {
-            throw new IllegalArgumentException("No such screening found");
-        }
-
-
-        Screening screening = screeningOptional.get();
+        Screening screening = findScreening(reservationDto);
         LocalDate today = LocalDate.of(
                 LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth());
         if (screening.getDate().isBefore(today)) {
@@ -104,9 +94,9 @@ public class ReservationServiceImpl implements ReservationService {
             if (reservationOptional.isPresent() && !reservationOptional.get().getStatus().equals(Status.DELETED)) {
                 throw new IllegalArgumentException("Reservation already exists");
             }
-            Reservation reservation = buildReservation(reservationDto,screening,seat,user);
+            Reservation reservation = buildReservation(reservationDto, screening, seat, user);
             reservationRepository.save(reservation);
-            lockService.unlockSeat(new LockDTO(reservationDto.getScreening(),reservationDto.getUser(),seat));
+            lockService.unlockSeat(new LockDTO(reservationDto.getScreening(), reservationDto.getUser(), seat));
 
         }
 
@@ -114,7 +104,82 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
 
-    private Reservation buildReservation(ReservationDTO reservationDto,Screening screening,Integer seat,User user){
+    @Override
+    @Transactional
+    public List<ReservationDTO> getAllReservationByPerson(PersonDTO personDTO) {
+        Optional<List<Reservation>> reservations = reservationRepository.findAllByFirstNameAndMiddleNameAndLastNameAndStatus(personDTO.getFirstName(),
+                personDTO.getMiddleName(), personDTO.getLastName(), Status.NEW);
+
+        if (reservations.isPresent()) {
+            return  reservationMapper.mapReservationsToDTO(reservations.get());
+        }
+
+        return new ArrayList<>();
+    }
+
+
+    @Override
+    @Transactional
+    public void confirmReservation(ReservationDTO reservationDTO){
+
+        Reservation reservation = getReservation(reservationDTO);
+
+        reservation.setStatus(Status.CONFIRMED);
+        reservationRepository.save(reservation);
+
+    }
+
+
+    @Override
+    @Transactional
+    public void deleteReservation(ReservationDTO reservationDTO){
+
+        Reservation reservation = getReservation(reservationDTO);
+
+        reservation.setStatus(Status.DELETED);
+        reservationRepository.save(reservation);
+
+    }
+
+    @Override
+    @Transactional
+    public List<ReservationDTO> getReservationsForUser(String user){
+        Optional<List<Reservation>> users = reservationRepository.findAllByUser_Email(user);
+        return reservationMapper.mapReservationsToDTO(users.get());
+
+    }
+
+    private Reservation getReservation(ReservationDTO reservationDTO){
+
+        Optional<Reservation> optionalReservation = reservationRepository.findFirstByScreeningAndSeatNumber(findScreening(reservationDTO), reservationDTO.getSeatNumbers().get(0));
+        if(!optionalReservation.isPresent()){
+            throw new IllegalArgumentException("NO reservation found");
+        }
+
+        Reservation reservation = optionalReservation.get();
+        if(!reservation.getStatus().equals(Status.NEW)){
+            throw new IllegalArgumentException("Reservation found is already deleted or confirmed");
+        }
+        return reservation;
+    }
+
+
+    private Screening findScreening(ReservationDTO reservationDTO){
+        ScreeningDTO screeningDto = reservationDTO.getScreening();
+        if (Objects.isNull(screeningDto)) {
+            throw new IllegalArgumentException("Screening should not be null");
+        }
+        Optional<Screening> screeningOptional = screeningRepository.findFirstByDateAndStartTimeAndHall_NumberAndMovie_Name(screeningDto.getDate(), screeningDto.getStartTime(),
+                screeningDto.getHall(), screeningDto.getMovie());
+
+        if (!screeningOptional.isPresent()) {
+            throw new IllegalArgumentException("No such screening found");
+        }
+
+        return screeningOptional.get();
+    }
+
+    private Reservation buildReservation(ReservationDTO reservationDto, Screening screening, Integer seat, User user) {
         Reservation reservation = new Reservation();
         reservation.setFirstName(reservationDto.getFirstName());
         reservation.setMiddleName(reservationDto.getMiddleName());
