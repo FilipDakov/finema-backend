@@ -1,12 +1,10 @@
 package com.fd.finema.bpcs;
 
-import com.fd.finema.bom.Movie;
 import com.fd.finema.bom.Response;
 import com.fd.finema.interfaces.MovieDTO;
 import com.fd.finema.services.MovieService;
 import com.fd.finema.utils.ResponseUtil;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +53,7 @@ public class MovieController {
     @Path("/movies/getUpcoming")
     @RequestMapping(value = "/movies/getUpcoming", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MovieDTO> getUpcomingMovies() throws Exception {
-        return movieService.getListMoviesComingSoon();
+        return movieService.getUpcomingMovies();
     }
 
 

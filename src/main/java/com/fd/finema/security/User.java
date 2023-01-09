@@ -17,6 +17,8 @@ public class User extends BaseEntity {
 
     private Boolean isAdmin;
 
+    private String passResetToken;
+
     public String getEmail() {
         return email;
     }
@@ -51,5 +53,13 @@ public class User extends BaseEntity {
 
     public User() {
 
+    }
+
+    public String getPassResetToken() {
+        return passResetToken;
+    }
+
+    public void setPassResetToken(String passResetToken) {
+        this.passResetToken = passResetToken;
     }
 }

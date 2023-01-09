@@ -39,12 +39,6 @@ public class Movie extends BaseEntity {
     @JoinTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
 
-//    @OneToOne()
-//    private Screening screening;
-
-//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "movie")
-//    private List<Screening> screenings;
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "movie_actor", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private List<Actor> actors;

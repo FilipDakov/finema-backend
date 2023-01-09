@@ -26,7 +26,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void addMovie(MovieDTO movie) throws Exception {
+    public void addMovie(MovieDTO movie)  {
         Optional<Movie> optional = movieRepository.findFirstByName(movie.getName());
         if(optional.isPresent()){
             throw new IllegalArgumentException("Movie is already present in database");
@@ -61,7 +61,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<MovieDTO> getListMoviesComingSoon(){
+    public List<MovieDTO> getUpcomingMovies(){
         Optional<List<Movie>> upcomingMovies = movieRepository.getFirst10ByReleaseDateAfterAndIsActiveOrderByReleaseDate(LocalDate.now(),false);
         return movieMapper.mapMovies(upcomingMovies.get());
     }

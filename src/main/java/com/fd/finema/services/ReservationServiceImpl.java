@@ -111,7 +111,18 @@ public class ReservationServiceImpl implements ReservationService {
                 personDTO.getMiddleName(), personDTO.getLastName(), Status.NEW);
 
         if (reservations.isPresent()) {
-            return  reservationMapper.mapReservationsToDTO(reservations.get());
+            return reservationMapper.mapReservationsToDTO(reservations.get());
+        }
+
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<ReservationDTO> getAllReservationByPerson(String firstName, String middleName, String lastName) {
+        Optional<List<Reservation>> reservations = reservationRepository.findAllByNames(firstName, middleName, lastName, Status.NEW);
+
+        if (reservations.isPresent()) {
+            return reservationMapper.mapReservationsToDTO(reservations.get());
         }
 
         return new ArrayList<>();
@@ -120,7 +131,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional
-    public void confirmReservation(ReservationDTO reservationDTO){
+    public void confirmReservation(ReservationDTO reservationDTO) {
 
         Reservation reservation = getReservation(reservationDTO);
 
@@ -132,7 +143,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional
-    public void deleteReservation(ReservationDTO reservationDTO){
+    public void deleteReservation(ReservationDTO reservationDTO) {
 
         Reservation reservation = getReservation(reservationDTO);
 
@@ -143,28 +154,40 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional
-    public List<ReservationDTO> getReservationsForUser(String user){
-        Optional<List<Reservation>> users = reservationRepository.findAllByUser_Email(user);
+    public List<ReservationDTO> getReservationsForUser(String user) {
+        Optional<List<Reservation>> users = reservationRepository.findAllByUser_EmailOrderByTimestampDesc(user);
         return reservationMapper.mapReservationsToDTO(users.get());
 
     }
 
-    private Reservation getReservation(ReservationDTO reservationDTO){
+    @Override
+    @Transactional
+    public List<ReservationDTO> getAllReservations() {
+        Optional<List<Reservation>> reservations = reservationRepository.findAllByStatus(Status.NEW);
+
+        if (reservations.isPresent()) {
+            return reservationMapper.mapReservationsToDTO(reservations.get());
+        }
+
+        return new ArrayList<>();
+    }
+
+    private Reservation getReservation(ReservationDTO reservationDTO) {
 
         Optional<Reservation> optionalReservation = reservationRepository.findFirstByScreeningAndSeatNumber(findScreening(reservationDTO), reservationDTO.getSeatNumbers().get(0));
-        if(!optionalReservation.isPresent()){
+        if (!optionalReservation.isPresent()) {
             throw new IllegalArgumentException("NO reservation found");
         }
 
         Reservation reservation = optionalReservation.get();
-        if(!reservation.getStatus().equals(Status.NEW)){
+        if (!reservation.getStatus().equals(Status.NEW)) {
             throw new IllegalArgumentException("Reservation found is already deleted or confirmed");
         }
         return reservation;
     }
 
 
-    private Screening findScreening(ReservationDTO reservationDTO){
+    private Screening findScreening(ReservationDTO reservationDTO) {
         ScreeningDTO screeningDto = reservationDTO.getScreening();
         if (Objects.isNull(screeningDto)) {
             throw new IllegalArgumentException("Screening should not be null");
@@ -183,7 +206,7 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = new Reservation();
         reservation.setFirstName(reservationDto.getFirstName());
         reservation.setMiddleName(reservationDto.getMiddleName());
-        reservation.setLastName(reservationDto.getMiddleName());
+        reservation.setLastName(reservationDto.getLastName());
         reservation.setScreening(screening);
         reservation.setUser(user);
         reservation.setSeatNumber(seat);

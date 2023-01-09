@@ -32,7 +32,6 @@ public class FilesController {
     @PostMapping(path = "/addFile")
     public Response uploadFile(@RequestParam("file") MultipartFile file) throws FileUploadException {
         fileService.save(file);
-
         return new Response(ResponseEnum.SUCCESS,"OK",(short)200);
     }
 }

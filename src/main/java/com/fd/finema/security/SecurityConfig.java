@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/logIn","/signUp","/movies/getMovies","/locks/lock","/reservation/freeSeats",
+                .antMatchers("/logIn","/signUp","/movies/getMovies","/emailSend","/resetPassword","/reservation/getReservations",
                         "/movies/getCurrentMovies","/screening/currentScreenings/{day}","/today","/movies/getUpcoming")
                 .permitAll()
                 .antMatchers("/v2/api-docs",
@@ -54,6 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/webjars/**").permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);;
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

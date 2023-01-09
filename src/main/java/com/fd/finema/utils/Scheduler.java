@@ -16,7 +16,6 @@ import java.util.Optional;
 @EnableAsync
 public class Scheduler {
 
-
     private MovieRepository movieRepository;
 
     public Scheduler(MovieRepository movieRepository) {
@@ -26,7 +25,7 @@ public class Scheduler {
     @Async
     @Scheduled(cron = "* 30 1 * * MON")
     public void scheduledCheckForActiveMovies(){
-        Optional<List<Movie>> inactiveMovies = movieRepository.getAllByReleaseDateIsBetweenAndIsActive(LocalDate.now(), LocalDate.now().plusDays(7), false);
+        Optional<List<Movie>> inactiveMovies = movieRepository.getAllByReleaseDateIsBetweenAndIsActive(LocalDate.now(), LocalDate.now().plusDays(14), false);
         if(inactiveMovies.isPresent()){
             List<Movie> movies = inactiveMovies.get();
             movies.forEach(x -> x.setActive(true));
@@ -34,7 +33,6 @@ public class Scheduler {
         }
 
     }
-
 
     @Async
     @Scheduled(cron = "* 0 1 * * MON")

@@ -17,6 +17,7 @@ public class HallServiceImpl implements HallService{
 
     @Override
     public List<Integer> getAvailableHalls() {
-        return hallRepository.findAll().stream().map(Hall::getNumber).collect(Collectors.toList());
+        return hallRepository.findAll()
+                .stream().map(Hall::getNumber).collect(Collectors.toList());
     }
 }

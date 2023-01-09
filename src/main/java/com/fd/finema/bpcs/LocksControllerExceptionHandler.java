@@ -16,6 +16,6 @@ public class LocksControllerExceptionHandler {
     @ResponseBody
     public Response handleException(Exception e){
         e.printStackTrace();
-        return new Response(ResponseEnum.ERROR,e.getMessage(),(short)501);
+        return new Response(ResponseEnum.ERROR,e.getMessage(),(short)500);
     }
 }

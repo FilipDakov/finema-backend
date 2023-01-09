@@ -22,11 +22,14 @@ import java.util.stream.Collectors;
 @Service
 public class ScreeningServiceImpl implements ScreeningService {
 
-    @Autowired
-    private ScreeningMapper screeningMapper;
+    private final ScreeningMapper screeningMapper;
 
-    @Autowired
-    private ScreeningRepository screeningRepository;
+    private final ScreeningRepository screeningRepository;
+
+    public ScreeningServiceImpl(ScreeningMapper screeningMapper, ScreeningRepository screeningRepository) {
+        this.screeningMapper = screeningMapper;
+        this.screeningRepository = screeningRepository;
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -55,14 +58,14 @@ public class ScreeningServiceImpl implements ScreeningService {
 
         screeningRepository.save(screening);
     }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<ScreeningDTO> getCurrentWeekScreenings() {
-        Optional<List<Screening>> allByDateAfterAndDateBefore = getCurrentScreenings();
-
-        return screeningMapper.mapToDtoScreenings(allByDateAfterAndDateBefore.get());
-    }
+//
+//    @Override
+//    @Transactional(propagation = Propagation.REQUIRED)
+//    public List<ScreeningDTO> getCurrentWeekScreenings() {
+//        Optional<List<Screening>> allByDateAfterAndDateBefore = getCurrentScreenings();
+//
+//        return screeningMapper.mapToDtoScreenings(allByDateAfterAndDateBefore.get());
+//    }
 
     private Optional<List<Screening>> getCurrentScreenings() {
         LocalDate now = LocalDate.now();
@@ -70,7 +73,7 @@ public class ScreeningServiceImpl implements ScreeningService {
         LocalDate monday = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate sunday = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
 
-        return screeningRepository.getAllByDateAfterAndDateBefore(monday, sunday);
+        return screeningRepository.getAllByDateAfterAndDateBefore(monday.minusDays(1), sunday.plusDays(1));
     }
 
     @Override
@@ -97,7 +100,7 @@ public class ScreeningServiceImpl implements ScreeningService {
             });
 
             return map.entrySet().stream()
-                    .map(x -> {return new MovieScreeningDTO(x.getKey(), x.getValue());})
+                    .map(x -> new MovieScreeningDTO(x.getKey(), x.getValue()))
                     .collect(Collectors.toList());
 
            // return map;
@@ -110,10 +113,4 @@ public class ScreeningServiceImpl implements ScreeningService {
        return LocalDate.now().getDayOfWeek().toString();
     }
 
-    private Date convertToDateViaInstant(LocalDate dateToConvert) {
-        return java.util.Date.from(dateToConvert.atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-    }
 }
-;

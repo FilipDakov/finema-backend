@@ -38,15 +38,6 @@ public class ScreeningController {
         return ResponseUtil.createSuccessResponse("Screening added successfully");
     }
 
-    @GET
-    @CrossOrigin
-    @Path("/screening/currentScreenings")
-    @RequestMapping(value = "/screening/currentScreenings", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response getScreeningsForWeek() throws Exception {
-
-        this.screeningService.getCurrentWeekScreenings();
-        return ResponseUtil.createSuccessResponse("Screening added successfully");
-    }
 
     @GET
     @CrossOrigin
@@ -56,6 +47,15 @@ public class ScreeningController {
         return this.screeningService.getCurrentScreeningsForDay(day);
     }
 
+//    @GET
+//    @CrossOrigin
+//    @Path("/screening/currentScreenings")
+//    @RequestMapping(value = "/screening/currentScreenings", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public Response getScreeningsForWeek() throws Exception {
+//
+//        this.screeningService.getCurrentWeekScreenings();
+//        return ResponseUtil.createSuccessResponse("Screening added successfully");
+//    }
 
     @GET
     @CrossOrigin

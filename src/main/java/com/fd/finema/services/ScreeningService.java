@@ -10,7 +10,7 @@ import java.util.List;
 public interface ScreeningService {
     public void createScreening(ScreeningDTO screeningDTO);
 
-    List<ScreeningDTO> getCurrentWeekScreenings();
+//    List<ScreeningDTO> getCurrentWeekScreenings();
     List<MovieScreeningDTO> getCurrentScreeningsForDay(String day);
     String getTodayDay();
 }

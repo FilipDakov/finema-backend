@@ -44,7 +44,7 @@ public class ReservationController {
     @RequestMapping(value = "/reservation/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response createReservation(@RequestBody ReservationDTO reservationDto){
         reservationService.createReservation(reservationDto);
-        return ResponseUtil.createSuccessResponse("Screening added successfully");
+        return ResponseUtil.createSuccessResponse("Reservation added successfully");
     }
 
     @POST
@@ -53,6 +53,15 @@ public class ReservationController {
     @RequestMapping(value = "/reservation/getReservations", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ReservationDTO> getReservations(@RequestBody PersonDTO reservationDto){
          return reservationService.getAllReservationByPerson(reservationDto);
+    }
+
+    @GET
+    @Path("/reservation/getReservations")
+    @CrossOrigin
+    @RequestMapping(value = "/reservation/getReservations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ReservationDTO> getReservationsByNames(@RequestParam(required = false) String firstName,@RequestParam(required = false) String middleName,
+                                                       @RequestParam(required = false) String lastName ){
+        return reservationService.getAllReservationByPerson(firstName, middleName, lastName);
     }
 
     @POST
@@ -79,5 +88,13 @@ public class ReservationController {
     @RequestMapping(value = "/reservation/getReservations/{user}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ReservationDTO> getReservationsForUser(@PathVariable String user){
         return reservationService.getReservationsForUser(user);
+    }
+
+    @GET
+    @Path("/reservation/getAllReservations")
+    @CrossOrigin
+    @RequestMapping(value = "/reservation/getAllReservations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ReservationDTO> getAllReservations(){
+        return reservationService.getAllReservations();
     }
 }
